@@ -75,6 +75,7 @@ defmodule AdventOfCode.CalorieCounting do
 
   Your puzzle answer was 212489.
   """
+  @spec count_calories_2() :: pos_integer()
   def count_calories_2() do
     "01_calorie_counting.txt"
     |> read_input()
