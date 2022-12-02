@@ -3,7 +3,8 @@ defmodule AdventOfCode do
   Documentation for `AdventOfCode`.
   """
 
-  def read_input(filename) do
-    File.read!("priv/input/#{filename}")
+  def read_input(filename, opts \\ []) do
+    path = Keyword.get(opts, :path, "priv/input/")
+    File.read!("#{path}#{filename}")
   end
 end
