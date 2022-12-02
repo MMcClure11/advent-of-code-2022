@@ -57,6 +57,37 @@ defmodule AdventOfCode.CalorieCounting do
     |> List.last()
   end
 
+  @doc """
+  --- Part Two ---
+
+  By the time you calculate the answer to the Elves' question, they've already realized that the Elf
+  carrying the most Calories of food might eventually run out of snacks.
+
+  To avoid this unacceptable situation, the Elves would instead like to know the total Calories
+  carried by the top three Elves carrying the most Calories. That way, even if one of those Elves
+  runs out of snacks, they still have two backups.
+
+  In the example above, the top three Elves are the fourth Elf (with 24000 Calories),
+  then the third Elf (with 11000 Calories), then the fifth Elf (with 10000 Calories).
+  The sum of the Calories carried by these three elves is 45000.
+
+  Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
+
+  Your puzzle answer was 212489.
+  """
+  def count_calories_2() do
+    "01_calorie_counting.txt"
+    |> read_input()
+    |> String.split("\n\n")
+    |> Enum.map(&String.split(&1, "\n"))
+    |> to_integer()
+    |> Enum.map(&Enum.sum(&1))
+    |> Enum.sort()
+    |> Enum.reverse()
+    |> Enum.take(3)
+    |> Enum.sum()
+  end
+
   defp to_integer(list) do
     Enum.map(list, fn x ->
       Enum.map(x, &String.to_integer(&1))
