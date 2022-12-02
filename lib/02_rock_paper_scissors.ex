@@ -77,4 +77,73 @@ defmodule AdventOfCode.RockPaperScissors do
   defp round_score(["C", "X"]), do: 7
   defp round_score(["C", "Y"]), do: 2
   defp round_score(["C", "Z"]), do: 6
+
+  @doc """
+  --- Part Two ---
+
+  The Elf finishes helping with the tent and sneaks back over to you.
+  "Anyway, the second column says how the round needs to end: X means you need to lose,
+  Y means you need to end the round in a draw, and Z means you need to win. Good luck!"
+
+  The total score is still calculated in the same way, but now you need to figure out what shape to choose so the round ends as indicated.
+  The example above now goes like this:
+
+    In the first round, your opponent will choose Rock (A), and you need the round to end in a draw (Y), so you also choose Rock.
+    This gives you a score of 1 + 3 = 4.
+
+    In the second round, your opponent will choose Paper (B), and you choose Rock so you lose (X)
+    with a score of 1 + 0 = 1.
+
+    In the third round, you will defeat your opponent's Scissors with Rock for a score of 1 + 6 = 7.
+
+  Now that you're correctly decrypting the ultra top secret strategy guide, you would get a total score of 12.
+
+  Following the Elf's instructions for the second column, what would your total score be if everything goes exactly according to your strategy guide?
+
+  Your puzzle answer was 16098.
+  """
+  @spec calculate_score_2(String.t(), []) :: pos_integer()
+  def calculate_score_2(data, opts \\ []) do
+    path = Keyword.get(opts, :path, "priv/input/")
+
+    data
+    |> read_input(path: path)
+    |> String.split("\n")
+    |> Enum.map(&String.split(&1, " "))
+    |> Enum.reduce(0, fn round, acc ->
+      acc + lose_draw_win(round)
+    end)
+  end
+
+  defp lose_draw_win(round) do
+    case List.last(round) do
+      "X" -> lose_shape(List.first(round))
+      "Y" -> 3 + draw_shape(List.first(round))
+      "Z" -> 6 + win_shape(List.first(round))
+    end
+  end
+
+  defp lose_shape(shape_to_lose) do
+    case shape_to_lose do
+      "A" -> 3
+      "B" -> 1
+      "C" -> 2
+    end
+  end
+
+  defp draw_shape(shape_to_draw) do
+    case shape_to_draw do
+      "A" -> 1
+      "B" -> 2
+      "C" -> 3
+    end
+  end
+
+  defp win_shape(shape_to_win) do
+    case shape_to_win do
+      "A" -> 2
+      "B" -> 3
+      "C" -> 1
+    end
+  end
 end
