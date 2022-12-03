@@ -71,21 +71,13 @@ defmodule AdventOfCode.RucksackReorganization do
   end
 
   defp find_common_char(compartments) do
-    list =
-      Enum.map(compartments, fn x ->
-        c_1 = x |> List.first() |> String.split("", trim: true)
-        c_2 = x |> List.last() |> String.split("", trim: true)
+      Enum.map(compartments, fn [compartment_1, compartment_2] ->
+        c_1 = String.codepoints(compartment_1)
 
-        Enum.reduce(c_1, "", fn char, acc ->
-          if Enum.member?(c_2, char) do
-            acc <> char
-          else
-            acc
-          end
+        Enum.find(c_1, fn x ->
+          String.contains?(compartment_2, x)
         end)
       end)
-
-      Enum.map(list, &String.at(&1, 0))
   end
 
   defp get_priorities(chars) do
@@ -170,10 +162,10 @@ defmodule AdventOfCode.RucksackReorganization do
 
   defp find_common_char_for_three_groups(groups) do
     groups
-    |> Enum.map(fn [elf1, elf2, elf3] ->
-      elf1
+    |> Enum.map(fn [group1, group2, group3] ->
+      group1
       |> String.codepoints()
-      |> Enum.find(fn item -> String.contains?(elf2, item) && String.contains?(elf3, item) end)
+      |> Enum.find(fn item -> String.contains?(group2, item) && String.contains?(group3, item) end)
     end)
   end
 end
