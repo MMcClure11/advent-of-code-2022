@@ -71,13 +71,13 @@ defmodule AdventOfCode.RucksackReorganization do
   end
 
   defp find_common_char(compartments) do
-      Enum.map(compartments, fn [compartment_1, compartment_2] ->
-        c_1 = String.codepoints(compartment_1)
+    Enum.map(compartments, fn [compartment_1, compartment_2] ->
+      c_1 = String.codepoints(compartment_1)
 
-        Enum.find(c_1, fn x ->
-          String.contains?(compartment_2, x)
-        end)
+      Enum.find(c_1, fn x ->
+        String.contains?(compartment_2, x)
       end)
+    end)
   end
 
   defp get_priorities(chars) do
