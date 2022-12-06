@@ -56,32 +56,63 @@ defmodule AdventOfCode.TuningTrouble do
 
     data
     |> parse_data(path)
-    |> first_four_unique()
+    |> count_marker_start(4)
   end
 
   defp parse_data(data, path) do
     data
     |> read_input(path: path)
-    |> String.split("\n")
-    |> List.first()
     |> String.codepoints()
   end
 
-  defp first_four_unique(code) do
-    first_four_unique(code, 4, 0)
+  defp count_marker_start(code, size) do
+    count_marker_start(code, size, 0)
   end
 
-  defp first_four_unique([], _size, _count), do: raise "No marker found"
-  defp first_four_unique(code, size, count) do
-    uniques = code
-    |> Enum.take(size)
-    |> Enum.uniq()
+  defp count_marker_start([], _size, _count), do: raise("No marker found")
 
-    if Enum.count(uniques) == size do
+  defp count_marker_start(code, size, count) do
+    uniques_count =
+      code
+      |> Enum.take(size)
+      |> Enum.uniq()
+      |> Enum.count()
+
+    if uniques_count == size do
       count + size
     else
-      first_four_unique(Enum.drop(code, 1), size, count + 1)
+      code
+      |> Enum.drop(1)
+      |> count_marker_start(size, count + 1)
     end
   end
 
+  @doc """
+  --- Part Two ---
+
+  Your device's communication system is correctly detecting packets, but still isn't working.
+  It looks like it also needs to look for messages.
+
+  A start-of-message marker is just like a start-of-packet marker, except it consists of 14 distinct characters rather than 4.
+
+  Here are the first positions of start-of-message markers for all of the above examples:
+
+    mjqjpqmgbljsphdztnvjfqwrcgsmlb: first marker after character 19
+    bvwbjplbgvbhsrlpgdmjqwftvncz: first marker after character 23
+    nppdvjthqldpwncqszvftbrmjlhg: first marker after character 23
+    nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg: first marker after character 29
+    zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 26
+
+  How many characters need to be processed before the first start-of-message marker is detected?
+
+  Your puzzle answer was 2122.
+  """
+  @spec part_two(String.t(), []) :: pos_integer()
+  def part_two(data, opts \\ []) do
+    path = Keyword.get(opts, :path, "priv/input/")
+
+    data
+    |> parse_data(path)
+    |> count_marker_start(14)
+  end
 end
