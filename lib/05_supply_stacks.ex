@@ -69,4 +69,53 @@ defmodule AdventOfCode.SupplyStacks do
 
   Your puzzle answer was VJSFHWGFT.
   """
+  @crates %{
+    1 => ~w(W P G Z V S B),
+    2 => ~w(F Z C B V J),
+    3 => ~w(C D Z N H M L V),
+    4 => ~w(B J F P Z M D L),
+    5 => ~w(H Q B J G C F V),
+    6 => ~w(B L S T Q F G),
+    7 => ~w(V Z C G L),
+    8 => ~w(G L N),
+    9 => ~w(C H F J)
+  }
+
+  @spec find_top_crates(String.t(), []) :: String.t()
+  def find_top_crates(data, opts \\ []) do
+    path = Keyword.get(opts, :path, "priv/input/")
+    initial_crates = Keyword.get(opts, :crates, @crates)
+
+    data
+    |> parse_data(path)
+    |> Enum.reduce(initial_crates, fn move, crates ->
+        {amount, from, to} = move
+        {crates_taken, new_from_stack} = Enum.split(crates[from], amount)
+        new_to_stack = Enum.reverse(crates_taken) ++ crates[to]
+
+        crates
+        |> Map.put(to, new_to_stack)
+        |> Map.put(from, new_from_stack)
+    end)
+    |> get_top_crates()
+  end
+
+  defp parse_data(data, path) do
+    data
+    |> read_input(path: path)
+    |> String.split("\n\n")
+    |> List.last()
+    |> String.split("\n")
+    |> Enum.map(fn move ->
+       [_move, amount, _from, from, _to, to] = String.split(move, " ")
+       {String.to_integer(amount), String.to_integer(from), String.to_integer(to)}
+    end)
+  end
+
+  defp get_top_crates(crates) do
+    Enum.reduce(crates, "", fn stack, acc ->
+        {_, crates_in_stack} = stack
+        acc <> List.first(crates_in_stack)
+    end)
+  end
 end
