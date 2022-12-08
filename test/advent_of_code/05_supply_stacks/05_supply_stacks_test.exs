@@ -13,7 +13,7 @@ defmodule AdventOfCode.SupplyStacksTest do
 
       assert "CMZ" ==
                SupplyStacks.find_top_crates("05_supply_stacks.txt",
-                 path: "test/05_supply_stacks/",
+                 path: "test/advent_of_code/05_supply_stacks/",
                  crates: crates
                )
     end
@@ -33,8 +33,9 @@ defmodule AdventOfCode.SupplyStacksTest do
       }
 
       assert "MCD" ==
-               SupplyStacks.find_top_crates_two("05_supply_stacks.txt",
-                 path: "test/05_supply_stacks/",
+               SupplyStacks.find_top_crates("05_supply_stacks.txt",
+                 path: "test/advent_of_code/05_supply_stacks/",
+                 reverse?: false,
                  crates: crates
                )
     end

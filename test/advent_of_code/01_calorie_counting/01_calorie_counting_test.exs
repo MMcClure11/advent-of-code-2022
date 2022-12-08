@@ -7,7 +7,7 @@ defmodule AdventOfCode.CalorieCountingTest do
     test "returns the correct result for example" do
       assert 24000 ==
                CalorieCounting.count_calories("01_calorie_counting.txt",
-                 path: "test/01_calorie_counting/"
+                 path: "test/advent_of_code/01_calorie_counting/"
                )
     end
 
@@ -20,7 +20,7 @@ defmodule AdventOfCode.CalorieCountingTest do
     test "returns the correct result for example" do
       assert 45000 ==
                CalorieCounting.count_calories_2("01_calorie_counting.txt",
-                 path: "test/01_calorie_counting/"
+                 path: "test/advent_of_code/01_calorie_counting/"
                )
     end
 

@@ -7,7 +7,7 @@ defmodule AdventOfCode.TuningTroubleTest do
     test "returns the correct result for example" do
       assert 7 ==
                TuningTrouble.part_one("06_tuning_trouble.txt",
-                 path: "test/06_tuning_trouble/"
+                 path: "test/advent_of_code/06_tuning_trouble/"
                )
     end
 
@@ -21,7 +21,7 @@ defmodule AdventOfCode.TuningTroubleTest do
     test "returns the correct result for example" do
       assert 19 ==
                TuningTrouble.part_two("06_tuning_trouble.txt",
-                 path: "test/06_tuning_trouble/"
+                 path: "test/advent_of_code/06_tuning_trouble/"
                )
     end
 

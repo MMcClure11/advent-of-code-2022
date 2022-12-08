@@ -7,7 +7,7 @@ defmodule AdventOfCode.RucksackReorganizationTest do
     test "returns the correct result for example" do
       assert 157 ==
                RucksackReorganization.priorities_sum("03_rucksack_reorganization.txt",
-                 path: "test/03_rucksack_reorganization/"
+                 path: "test/advent_of_code/03_rucksack_reorganization/"
                )
     end
 
@@ -21,7 +21,7 @@ defmodule AdventOfCode.RucksackReorganizationTest do
     test "returns the correct result for example" do
       assert 70 ==
                RucksackReorganization.priorities_sum_2("03_rucksack_reorganization.txt",
-                 path: "test/03_rucksack_reorganization/"
+                 path: "test/advent_of_code/03_rucksack_reorganization/"
                )
     end
 
