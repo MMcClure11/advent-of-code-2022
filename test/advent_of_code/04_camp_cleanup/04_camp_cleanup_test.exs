@@ -7,7 +7,7 @@ defmodule AdventOfCode.CampCleanupTest do
     test "returns the correct result for example" do
       assert 2 ==
                CampCleanup.assignment_pairs("04_camp_cleanup.txt",
-                 path: "test/04_camp_cleanup/"
+                 path: "test/advent_of_code/04_camp_cleanup/"
                )
     end
 
@@ -21,7 +21,7 @@ defmodule AdventOfCode.CampCleanupTest do
     test "returns the correct result for example" do
       assert 4 ==
                CampCleanup.assignment_pairs_2("04_camp_cleanup.txt",
-                 path: "test/04_camp_cleanup/"
+                 path: "test/advent_of_code/04_camp_cleanup/"
                )
     end
 

@@ -7,7 +7,7 @@ defmodule AdventOfCode.RockPaperScissorsTest do
     test "returns the correct result for example" do
       assert 15 ==
                RockPaperScissors.calculate_score("02_rock_paper_scissors.txt",
-                 path: "test/02_rock_paper_scissors/"
+                 path: "test/advent_of_code/02_rock_paper_scissors/"
                )
     end
 
@@ -20,7 +20,7 @@ defmodule AdventOfCode.RockPaperScissorsTest do
     test "returns the correct result for example" do
       assert 12 ==
                RockPaperScissors.calculate_score_2("02_rock_paper_scissors.txt",
-                 path: "test/02_rock_paper_scissors/"
+                 path: "test/advent_of_code/02_rock_paper_scissors/"
                )
     end
 
