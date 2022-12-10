@@ -48,28 +48,23 @@ defmodule AdventOfCode.TreetopTreeHouse do
 
     grid = parse_data(data, path)
 
-    max_x = Arrays.size(grid[0]) - 1
-    max_y = Arrays.size(grid) - 1
+    # width of grid, minus 1 to get indices
+    max_x = Enum.count(List.first(grid)) - 1
+    # height of grid, minus 1 to get indices
+    max_y = Enum.count(grid) - 1
 
-    visible_trees =
+    visible_trees_inside_grid =
       for y <- 1..(max_y - 1),
           x <- 1..(max_x - 1),
           visible?(grid, {x, y}, max_x, max_y) do
         {x, y}
       end
 
-    visible_on_west_and_east =
-      grid
-      |> Enum.map(&Arrays.to_list(&1))
-      |> number_visible_on_west_and_east()
-
-    visible_on_north_and_south =
-      grid
-      |> Enum.map(&Arrays.to_list(&1))
-      |> number_visible_on_north_and_south()
-
-    Enum.count(visible_trees) +
-      trees_on_edges(visible_on_west_and_east, visible_on_north_and_south)
+    Enum.count(visible_trees_inside_grid) +
+      trees_on_edges(
+        number_visible_on_west_and_east(grid),
+        number_visible_on_north_and_south(grid)
+      )
   end
 
   defp parse_data(data, path) do
@@ -77,53 +72,70 @@ defmodule AdventOfCode.TreetopTreeHouse do
     |> read_input(path: path)
     |> String.split("\n")
     |> Enum.map(fn line ->
-      line |> String.graphemes() |> Enum.map(&String.to_integer/1) |> Arrays.new()
+      line
+      |> String.split("", trim: true)
+      |> Enum.map(&String.to_integer/1)
     end)
-    |> Arrays.new()
   end
 
   defp visible?(grid, {x, y}, max_x, max_y) do
-    visible_from_north(grid, {x, y}) or visible_from_south(grid, {x, y}, max_y) or
-      visible_from_east(grid, {x, y}) or visible_from_west(grid, {x, y}, max_x)
+    visible_from_north(grid, {x, y}) || visible_from_south(grid, {x, y}, max_y) ||
+      visible_from_east(grid, {x, y}) || visible_from_west(grid, {x, y}, max_x)
   end
 
   defp visible_from_north(grid, {x, y}) do
-    height = grid[y][x]
+    height_of_tree = get_tree_height(grid, {x, y})
 
+    # check height of each tree on y-axis in same column as given tree
+    # (y - 1)..0//-1 the range, counting down from the top, subtract 1 to exclude current tree
     Enum.reduce((y - 1)..0//-1, true, fn new_y, acc ->
-      acc and grid[new_y][x] < height
+      acc and get_tree_height(grid, {x, new_y}) < height_of_tree
     end)
   end
 
   defp visible_from_south(grid, {x, y}, max_y) do
-    height = grid[y][x]
+    height = get_tree_height(grid, {x, y})
 
+    # check height of each tree on y-axis in same column as given tree
+    # (y + 1)..max_y the range, counting up from the bottom, add 1 to exclude current tree
     Enum.reduce((y + 1)..max_y, true, fn new_y, acc ->
-      acc and grid[new_y][x] < height
+      acc and get_tree_height(grid, {x, new_y}) < height
     end)
   end
 
   defp visible_from_east(grid, {x, y}) do
-    height = grid[y][x]
+    height = get_tree_height(grid, {x, y})
 
+    # check height of each tree on x-axis in same row as given tree
+    # (x - 1)..0//-1 the range, counting down to the left, subtract 1 to exclude current tree
     Enum.reduce((x - 1)..0//-1, true, fn new_x, acc ->
-      acc and grid[y][new_x] < height
+      acc and get_tree_height(grid, {new_x, y}) < height
     end)
   end
 
   defp visible_from_west(grid, {x, y}, max_x) do
-    height = grid[y][x]
+    height = get_tree_height(grid, {x, y})
 
+    # check height of each tree on x-axis in same row as given tree
+    # (x + 1)..max_x the range, counting up to the right, subtract 1 to exclude current tree
     Enum.reduce((x + 1)..max_x, true, fn new_x, acc ->
-      acc and grid[y][new_x] < height
+      acc and get_tree_height(grid, {new_x, y}) < height
     end)
   end
 
+  defp get_tree_height(grid, {x, y}) do
+    # first find y -> the row the tree is in
+    # find x -> the column the tree is in within that row
+    grid |> Enum.at(y) |> Enum.at(x)
+  end
+
   defp number_visible_on_west_and_east(grid) do
+    # number of rows, times 2
     Enum.count(grid) * 2
   end
 
   defp number_visible_on_north_and_south(grid) do
+    # number of columns
     row_length =
       grid
       |> List.first()
@@ -133,7 +145,7 @@ defmodule AdventOfCode.TreetopTreeHouse do
   end
 
   defp trees_on_edges(west_and_east, north_and_south) do
-    # remove duplicate of corner
+    # remove duplicate of the corners
     west_and_east + north_and_south - 4
   end
 end
