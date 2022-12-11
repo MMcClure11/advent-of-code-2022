@@ -31,10 +31,33 @@ defmodule Mix.Tasks.Aoc.Gen.Solution do
     defmodule AdventOfCode.#{module_name(name)} do
       @moduledoc false
       import AdventOfCode
-      def part_one, do: "#{name}.txt" |> read_input() |> part_one()
-      def part_one(input), do: dbg(input)
-      def part_two, do: "#{name}.txt" |> read_input() |> part_two()
-      def part_two(input), do: dbg(input)
+
+      @doc \"""
+      \"""
+      @spec part_one(String.t(), []) :: pos_integer()
+      def part_one(data, opts \\\\ []) do
+        path = Keyword.get(opts, :path, "priv/input/")
+
+        data
+        |> parse_data(path)
+      end
+
+      defp parse_data(data, path) do
+        data
+        |> read_input(path: path)
+        |> IO.inspect()
+      end
+
+      @doc \"""
+      \"""
+      @spec part_two(String.t(), []) :: pos_integer()
+      def part_two(data, opts \\\\ []) do
+        path = Keyword.get(opts, :path, "priv/input/")
+
+        data
+        |> parse_data(path)
+        |> IO.inspect()
+      end
     end
     """
   end
@@ -56,11 +79,36 @@ defmodule Mix.Tasks.Aoc.Gen.Solution do
     """
     defmodule AdventOfCode.#{module_name}Test do
       use ExUnit.Case
-      import AdventOfCode.#{module_name}
-      @input \"\"\"
-      \"\"\"
-      test "part_one/1", do: assert(part_one(@input))
-      test "part_two/1", do: assert(part_two(@input))
+
+      alias AdventOfCode.#{module_name}
+
+      describe "part_one/2" do
+        test "returns the correct result for example" do
+          assert :x ==
+                  #{module_name}.part_one("#{name}.txt",
+                     path: "test/advent_of_code/#{name}/"
+                   )
+        end
+
+        test "returns the correct result" do
+          assert :y ==
+                   #{module_name}.part_one("#{name}.txt")
+        end
+      end
+
+      describe "part_two/2" do
+        test "returns the correct result for example" do
+          assert :z ==
+                  #{module_name}.part_one("#{name}.txt",
+                    path: "test/advent_of_code/#{name}/"
+                  )
+        end
+
+        test "returns the correct result" do
+          assert :a ==
+                   #{module_name}.part_two("#{name}.txt")
+        end
+      end
     end
     """
   end
